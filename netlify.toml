@@ -1,1 +1,11 @@
+[build]
+  publish = "."  # Publish the root directory (where index.html resides)
+  command = "python -m spacy download en_core_web_sm" # or put requirements into a file in netlify/functions
 
+[functions]
+  directory = "netlify/functions"  # Tell Netlify where your serverless functions are
+
+[[headers]]
+   for = "/*"
+   [headers.values]
+   Access-Control-Allow-Origin = "*"
