@@ -1,7 +1,0 @@
-The build failed during the stage of 'building site' with a non-zero exit code of 2.
-Solution:
-
-The error code 2 commonly indicates that there is an issue with the build script.
-To address this:
-Check the build script to ensure there are no syntax errors or missing dependencies causing the non-zero exit code. Review any custom build commands or scripts that might be failing.
-Verify that all build configurations are correctly set up for the framework being used.
