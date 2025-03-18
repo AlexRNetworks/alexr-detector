@@ -1,10 +1,12 @@
-# netlify/functions/api.py
-import json
-import re
+from fastapi import FastAPI, request, jsonify
+from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 import math
 import spacy
+import re
+import os
+
 
 # --- Load Models (Do this ONCE, outside the handler) ---
 try:
@@ -22,20 +24,22 @@ def preprocess_text(text):
     text = text.strip()
     return text
 
-def calculate_perplexity(text):
-    if not perplexity_available:
-        return None
+def calculate_perplexity(self, text):
+  if not perplexity_available:
+    return None # Return None
 
-    try:
-        inputs = tokenizer(text, return_tensors="pt")
-        with torch.no_grad():
-            outputs = model(**inputs, labels=inputs["input_ids"])
-        loss = outputs.loss
-        perplexity = torch.exp(loss).item()
-        return perplexity
-    except Exception as e:
-        print(f"Error calculating perplexity: {e}")
-        return None
+  try:
+      inputs = tokenizer(text, return_tensors="pt")
+      with torch.no_grad():
+          outputs = model(**inputs, labels=inputs["input_ids"])
+      loss = outputs.loss
+      perplexity = torch.exp(loss).item()
+      return perplexity
+
+  except Exception as e:
+      print(f"Error during perplexity calculation: {e}")
+      return None
+
 
 def extract_features(text):
     doc = nlp(text)
@@ -56,10 +60,23 @@ def extract_features(text):
         features["type_token_ratio"] = 0
 
     return features
-def handler(event, context):
+
+app = FastAPI()
+
+# --- CORS Configuration (MUST HAVE THIS IF NO netlify.toml) ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins (for testing - restrict in production!)
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+
+@app.post('/api/detect')  # Use @app.post for FastAPI
+async def detect_ai(request: Request):  # Use Request object
     try:
-        body = json.loads(event['body'])
-        text = body['text']
+        data = await request.json()  # Get JSON data
+        text = data['text']
         text = preprocess_text(text)
 
         perplexity = calculate_perplexity(text)
@@ -99,6 +116,7 @@ def handler(event, context):
 
         confidence = max(0, min(confidence, 1))  # Ensure 0-1 range
         explanation = f"Perplexity: {perplexity:.2f} (lower is more likely AI).  Avg Sentence Length: {features['avg_sentence_length']:.2f}. Type-Token Ratio: {features['type_token_ratio']:.2f}."
+
 
         return {
             'statusCode': 200,
