@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
         try {
-            const response = await fetch('/.netlify/functions/api', {
+            const response = await fetch('/.netlify/functions/api', { //  Netlify Function URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             alert('An error occurred during detection. Please try again.');
         } finally {
-            loadingSpinner.classList.add('hidden');
+            loadingSpinner.classList.add('hidden'); // Hide spinner
         }
     });
 });
