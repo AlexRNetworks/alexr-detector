@@ -1,4 +1,0 @@
-transformers
-torch
-spacy
-python-dotenv # Add if handling environment variables
