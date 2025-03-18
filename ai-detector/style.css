@@ -1,1 +1,285 @@
+/* Modern Color Palette */
+:root {
+    --primary-color: #007bff; /* Blue */
+    --text-color: #343a40; /* Dark Gray */
+    --accent-color: #6c757d; /* Medium Gray */
+    --button-hover-color: #0056b3;
 
+    /* Dark Mode Variables */
+    --dark-text-color: #f8f9fa;
+    --dark-accent-color: #999; /* Lighter gray for dark mode text */
+    --dark-button-hover-color: #007bff;
+}
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff; /* White background */
+    color: var(--text-color);
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.container {
+    background-color: #fff; /* White background */
+    padding: 30px;
+    /* Removed border-radius and box-shadow */
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+}
+
+p {
+    color: var(--accent-color);
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    /* Removed border */
+    border-radius: 8px; /* Keep rounded corners */
+    font-size: 1rem;
+    resize: vertical;
+    transition: box-shadow 0.3s ease; /* Add box-shadow transition */
+    flex-grow: 1;
+    background-color: #f8f9fa;
+}
+
+textarea:focus {
+     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Focus outline instead of border */
+    outline: none;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
+    /* Removed border */
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 20px; /* Add margin to the bottom */
+
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-2px);
+}
+
+#results {
+    margin-top: 30px;
+    padding-top: 20px;
+    /*Removed border top*/
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#results.visible {
+    opacity: 1;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+#results p {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.explanation {
+    font-style: italic;
+    color: var(--accent-color);
+    margin-top: 15px;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+/* Spinner */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--primary-color);
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none;
+}
+/* Progress Bar Styles */
+#confidenceBar {
+    width: 100%;
+    height: 20px;
+    margin-bottom: 15px; /* Keep margin */
+    border-radius: 8px; /* Keep rounded corners */
+   /* Removed border */
+    appearance: none;
+    -webkit-appearance: none;
+     background-color: #eee; /* Background color of the bar - visible before loading */
+    transition: width 0.5s ease; /* Smooth transition for the value - now applied to width*/
+}
+
+/* WebKit (Chrome, Safari) */
+#confidenceBar::-webkit-progress-bar {
+    background-color: #eee; /* Background color of the bar */
+    border-radius: 8px;
+}
+
+#confidenceBar::-webkit-progress-value {
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    /* Removed transition from here */
+
+}
+
+/* Firefox */
+#confidenceBar::-moz-progress-bar {
+    background-color: var(--primary-color);
+    border-radius: 8px;
+}
+#scoreLabel {
+    text-align: center;
+    margin-bottom: 5px; /* Space between label and bar */
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212; /* Dark background */
+        color: var(--dark-text-color);
+    }
+
+    .container {
+        background-color: #121212; /* Dark background */
+        /* Removed box-shadow */
+    }
+    textarea{
+        background-color: #292929;
+        color: var(--dark-text-color);
+    }
+
+      textarea:focus {
+     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Focus outline instead of border */
+    outline: none;
+}
+
+    button {
+        background-color: var(--primary-color);
+    }
+    button:hover{
+         background-color: #0056b3;
+    }
+
+    .explanation {
+        color: var(--dark-accent-color);
+    }
+
+    h1, h2 {
+        color: var(--primary-color);
+    }
+    /* Dark mode progress bar */
+    #confidenceBar::-webkit-progress-bar{
+        background-color: #333;
+    }
+    #scoreLabel {
+        color: var(--dark-text-color);
+    }
+     .scale .tick{
+         background-color: var(--dark-accent-color);
+    }
+     .scale .tick span {
+        color: var(--dark-accent-color)
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px;
+        /* Removed border-radius and box-shadow */
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    textarea {
+        font-size: 0.9rem;
+    }
+
+    button {
+        font-size: 1rem;
+    }
+    /* No border on the progress bar on small screens */
+    #confidenceBar {
+         background-color: #eee; /* Background color of the bar - visible before loading */
+    }
+}
+.scale {
+    display: flex;
+    justify-content: space-between; /* Distribute ticks evenly */
+    width: 100%;
+    margin-top: 5px; /* Space between progress bar and scale */
+}
+
+.scale .tick {
+    position: relative; /* For positioning the labels */
+    width: 1px; /* Thin tick marks */
+    height: 10px; /* Height of the tick marks */
+    background-color: var(--accent-color);
+}
+.scale .tick:first-child{
+      transform: translateX(-50%);
+}
+.scale .tick:last-child{
+    transform: translateX(50%);
+}
+
+.scale .tick span {
+    position: absolute;
+    bottom: -20px; /* Position labels below the ticks */
+    left: 50%;
+    transform: translateX(-50%); /* Center the labels */
+    font-size: 0.8rem;
+    color: var(--accent-color);
+}
